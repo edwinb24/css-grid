@@ -6,22 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>CSS Grid Image Gallery!</title>
-</head>
-
-<body>
-
-  <div class="overlay">
-    <div class="overlay-inner">
-      <button class="close">× Close</button>
-      <img>
-    </div>
-  </div>
-
-  <section class="gallery">
-  </section>
-
 
   <style>
+    :root {
+      --yellow: #ffc60032;
+    }
+
     * {
       box-sizing: border-box;
     }
@@ -45,16 +35,75 @@
       margin: 0 0 20px 0;
     }
 
-    .close {
-      background: none;
-      color: white;
-      border: 0;
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, 100px);
+      grid-auto-rows: 100px;
+      grid-auto-flow: dense;
     }
 
-    .gallery {}
+    .item {
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1;
+      grid-template-rows: 1;
+    }
+    .item img {
+      grid-column: 1 / -1;
+      grid-row: 1 / -1;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .item .item__overlay {
+      grid-column: 1 / -1;
+      grid-row: 1 / -1;
+      width: 100%;
+      height: 100%;
+      background: var(--yellow);
+      display: grid;
+      grid-template-columns: 1;
+      grid-template-rows: 1;
+      transform: translateY(100%);
+      transition: .3s;
+    }
 
+    .item:hover .item__overlay {
+      transform: translateY(0%);
+    }
 
+    .item .expand_btn {
+      justify-self: center;
+      align-self: center;
+      border: 1px solid white;
+      color: white;
+      background: rgba(0, 0, 0, 0.2);
+    }
 
+    .h2 {
+      grid-column: span 2;
+    }
+
+    .h3 {
+      grid-column: span 3;
+    }
+
+    .h4 {
+      grid-column: span 4;
+    }
+
+    .v2 {
+      grid-row: span 2;
+    }
+
+    .v3 {
+      grid-row: span 3;
+    }
+
+    .v4 {
+      grid-column: span 4;
+    }
     .overlay {
       position: fixed;
       background: rgba(0, 0, 0, 0.7);
@@ -64,13 +113,20 @@
       left: 0;
       display: none;
       z-index: 2;
+      align-items: center;
+      justify-items: center;
     }
 
     .overlay.open {
       display: grid;
     }
+    .overlay .close {
+      background: none;
+      color: black;
+      border: 0;
+    }
 
-    .overlay figure {
+    .overlay_inner {
       background: white;
       width: 700px;
       padding: 20px;
@@ -79,10 +135,91 @@
     .overlay img {
       width: 100%;
     }
+
   </style>
 
   <script>
+  window.onload = () => {
+    const gallery = document.querySelector('.gallery');
+    const overlay = document.querySelector('.overlay');
+    const overlay_close = document.querySelector('.close');
+
+    function randomNumber(limit) {
+      return Math.floor(Math.random() * limit) + 1;
+    }
+
+    function openOverlay(e) {
+      let myimg = e.currentTarget.querySelector('img').src;
+      overlay.classList.add("open");
+      overlay.querySelector('img').src = myimg;
+
+    }
+
+    function closeOverlay(e) {
+      mytarget = e.target;
+      if(mytarget == overlay || mytarget == overlay_close) {
+        overlay.classList.remove("open");
+      }
+    }
+
+
+    class gallery_image {
+      constructor(image_name) {
+        this.image_name = image_name;
+      }
+
+      renderImage([h,v]) {
+        return `
+        <div class="item h${h} v${v}">
+          <img src="images/${this.image_name}.jpg">
+          <div class="item__overlay">
+            <button class="expand_btn">
+              View->
+            </button>
+          </div>
+        </div>
+        `
+      }
+    }
+
+    let img_html = "";
+    let all_images = new Array()
+    for (let i = 0; i < 50; i++) {
+      all_images[i] = new gallery_image(randomNumber(12));
+      img_html += all_images[i].renderImage([randomNumber(4),randomNumber(4)]);
+    }
+    for (let i = 0; i < 20; i++) {
+      all_images[i] = new gallery_image(randomNumber(12));
+      img_html += all_images[i].renderImage([1,1]);
+    }
+
+    gallery.innerHTML = img_html;
+    const items = document.querySelectorAll('.item')
+    items.forEach( item => {
+      item.addEventListener("click", openOverlay);
+    });
+    overlay_close.addEventListener("click", closeOverlay);
+    overlay.addEventListener("click", closeOverlay);
+
+  }
   </script>
+
+</head>
+
+<body>
+
+  <div class="overlay">
+    <div class="overlay_inner">
+      <button class="close">× Close</button>
+      <img>
+    </div>
+  </div>
+
+  <section class="gallery">
+  </section>
+
+
+
 </body>
 
 </html>

@@ -7,6 +7,25 @@
   <link rel="stylesheet" href="../assets/style.css">
   <link rel="stylesheet" href="./responsive-START.css">
   <title>Responsive Website!</title>
+
+  <script>
+  window.onload = () => {
+    const open_btn = document.querySelector(".menu .open");
+    const close_btn = document.querySelector(".menu .close");
+    const menu_list = document.querySelector("button[aria-expanded]");
+    console.log(`open_btn ${open_btn.innerHTML} `);
+    console.log(`close_btn ${close_btn.innerHTML} `);
+    console.log(`menu_list ${menu_list.innerHTML} `);
+
+    function toggleNav(e) {
+      let menu_btn = e.target;
+      let is_expanded = menu_btn. getAttribute('aria-expanded') === 'true' || false;
+      menu_btn.setAttribute('aria-expanded', !is_expanded);
+    }
+
+    menu_list.addEventListener("click", toggleNav);
+  }
+  </script>
 </head>
 
 <body>
@@ -103,7 +122,7 @@
 
   <script>
   </script>
-  
+
 </body>
 
 </html>

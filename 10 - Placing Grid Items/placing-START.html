@@ -6,6 +6,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../assets/style.css">
   <title>Placing Grid Items!</title>
+  <style>
+    .container {
+      display: grid;
+      grid-gap: 20px;
+      grid-template-columns: repeat(5, 1fr);
+    }
+    .thumb-up {
+      /* grid-column-start: 2;
+      grid-column-end: 5; */
+      grid-column: 2/5;
+      background-color: aliceblue;
+    }
+  </style>
 </head>
 
 <body>
@@ -17,8 +30,7 @@
     <div class="item item5">5</div>
     <div class="item item6">6</div>
     <div class="item item7">7</div>
-    <div class="item item8">8</div>
-    <div class="item item8">💩</div>
+    <div class="item thumb-up">👍</div>
     <div class="item item9">9</div>
     <div class="item item10">10</div>
     <div class="item item11">11</div>
